@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's My IP Address? - ip.onyachamp.com</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+            background-color: #f8f9fa;
+            color: #212529;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        #ip-address-container {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        #ip-address {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #007bff;
+            word-break: break-all; /* Prevents overflow on long IPs */
+        }
+        footer {
+            font-size: 0.9em;
+            color: #6c757d;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        footer a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: #dee2e6;
+            width: 80%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ip-address-container">
+        <h1>Your Public IP Address Is:</h1>
+        <div id="ip-address">Loading...</div>
+    </div>
+
+    <footer>
+        <p>Hosted at ip.onyachamp.com</p>
+        <hr>
+        <p>
+            This simple service is inspired by the straightforward, no-nonsense utility provided for years by
+            <a href="https://icanhazip.com/" target="_blank" rel="noopener noreferrer">icanhazip.com</a>.
+        </p>
+        <p>
+            Hats off to its creator, <strong>Major Hayden</strong>, who built a tool in 2009 that became an essential, ad-free resource for countless developers, sysadmins, and automated scripts across the internet. Its legacy continues under the stewardship of Cloudflare.
+        </p>
+        <p>
+             Simple, useful tools make the web better.
+        </p>
+    </footer>
+
+    <script>
+        // Use a reliable and simple API to get the IP address
+        // ipify is a good choice for this.
+        fetch('https://api.ipify.org?format=json')
+            .then(response => {
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Display the IP address
+                document.getElementById('ip-address').textContent = data.ip;
+            })
+            .catch(error => {
+                // Display an error message if fetching fails
+                console.error('Error fetching IP address:', error);
+                document.getElementById('ip-address').textContent = 'Unavailable';
+                // Optionally provide more context in the footer or elsewhere
+                let footer = document.querySelector('footer');
+                let errorMsg = document.createElement('p');
+                errorMsg.style.color = 'red';
+                errorMsg.textContent = 'Could not retrieve IP address at this time.';
+                footer.appendChild(errorMsg);
+            });
+    </script>
+
+</body>
+</html>
